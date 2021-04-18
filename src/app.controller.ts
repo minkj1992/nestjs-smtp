@@ -12,6 +12,6 @@ export class AppController {
 
   @Get('template')
   sendTemplate(): any {
-    return this.appService.example2();
+    return this.appService.documentPassNotification();
   }
 }
