@@ -20,11 +20,14 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs-modules/mailer": "^1.4.2",
+    "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/common": "^6.11.11",
     "@nestjs/core": "^6.11.11",
     "@nestjs/platform-express": "^6.11.11",
+    "class-transformer": "^0.4.0",
+    "csv-parser": "^3.0.0",
     "dotenv": "^8.2.0",
+    "fs": "0.0.1-security",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.5"
