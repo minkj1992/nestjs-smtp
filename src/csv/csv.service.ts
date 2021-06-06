@@ -16,15 +16,13 @@ export interface ParsedData<T> {
 export class CsvService {
   constructor() {}
   async readCsv(fileName: string) {
-    const stream: fs.ReadStream = fs.createReadStream(
-      `${__dirname}/${fileName}`,
-    );
+    const stream = fs.createReadStream(`${__dirname}/${fileName}`);
     return stream;
   }
 
   async parse(
-    stream: fs.ReadStream,
-    Entity: any,
+    stream,
+    Entity,
     count: number = null,
     offset: number = null,
     csvConfig: object = {},
@@ -45,20 +43,25 @@ export class CsvService {
 
       pipedStream.on('error', e => {
         errors.push(e);
+
         reject({ errors });
       });
 
       pipedStream.on('data', line => {
         i++;
+
         if (count) {
           if (c >= count) {
             return;
           }
+
           if (offset && i - 1 < offset) {
             return;
           }
+
           c++;
         }
+
         list.push(this.processLine(line, Entity));
       });
 

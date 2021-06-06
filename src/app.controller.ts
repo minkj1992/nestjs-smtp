@@ -5,13 +5,10 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  sendMail(): any {
-    return this.appService.example();
-  }
-
   @Get('template')
-  sendTemplate(): any {
-    return this.appService.documentPassNotification();
+  sendTemplate(flag = true) {
+    return flag
+      ? this.appService.sendMailToSuccessfulApplicants()
+      : this.appService.sendMailToUnsuccessfulApplicants();
   }
 }

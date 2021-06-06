@@ -14,3 +14,6 @@
 - feat
   - 유저 정보가 들어있는 csv read with altair-graphql
   - 해당 유저들에게 template에 맞게 mail 전송
+
+## setup
+- 사용할 어드민 gmail 계정은 `Less secure app access`가 `on` 되어있어야 한다.
