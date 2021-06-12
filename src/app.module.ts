@@ -9,28 +9,28 @@ import { CsvModule } from './csv/csv.module';
 
 @Module({
   imports: [
-    MailerModule.forRootAsync({
-      useFactory: () => ({
-        transport: {
-          host: process.env.EMAIL_HOST,
-          port: process.env.EMAIL_PORT,
-          secure: false, // true for 465, false for other ports
-          auth: {
-            user: process.env.EMAIL_ID, // generated ethereal user
-            pass: process.env.EMAIL_PASS, // generated ethereal password
-          },
+    MailerModule.forRoot({
+      transport: {
+        pool: true,
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: process.env.EMAIL_ID, // generated ethereal user
+          pass: process.env.EMAIL_PASS, // generated ethereal password
         },
-        defaults: {
-          from: process.env.MAIL_USER || '"nest-modules" <minkj1992@gmail.com>', // outgoing email ID
+      },
+      defaults: {
+        from: process.env.MAIL_USER || '"nest-modules" <teamnexters@gmail.com>', // outgoing email ID
+      },
+
+      template: {
+        dir: process.cwd() + '/template/',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
         },
-        template: {
-          dir: process.cwd() + '/template/',
-          adapter: new HandlebarsAdapter(),
-          options: {
-            strict: true,
-          },
-        },
-      }),
+      },
     }),
 
     CsvModule,

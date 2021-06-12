@@ -17,3 +17,5 @@
 
 ## setup
 - 사용할 어드민 gmail 계정은 `Less secure app access`가 `on` 되어있어야 한다.
+- gmail의 `smtp`는 요청 건수가 약 100건이 넘어가면 서버 에러를 띄운다.
+- gmail의 경우 1초당 특정 갯수 이상의 메일을 보내게 될 경우 temporary error를 띄운다.

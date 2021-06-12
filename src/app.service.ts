@@ -18,7 +18,24 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async sendMailToSuccessfulApplicants(): Promise<void> {
+  async taskJob(user: RealCsvEntity, template) {
+    await this.mailerService
+      .sendMail({
+        to: user.이메일,
+        from: 'teamnexters@gmail.com', // Senders email address
+        subject: '[NEXTERS] 19기 서류 전형 결과에 대해 알려드립니다.',
+        template: `./${template}`, // The `.pug` or `.hbs` extension is appended automatically.
+        context: {
+          username: user.이름,
+        },
+      })
+      .then(() => console.log('success'))
+      .catch(err => {
+        console.log(`${user.이름},${user.이메일},${user['핸드폰 번호']}`);
+      });
+  }
+
+  async sendMailToApplicants(template: string): Promise<void> {
     const entities: ParsedData<RealCsvEntity> = await this.csvService.parse(
       this.csvStream,
       RealCsvEntity,
@@ -30,29 +47,7 @@ export class AppService {
     );
 
     entities.list.forEach(async user => {
-      console.log(user);
-      await this.mailerService
-        .sendMail({
-          to: user.이메일,
-          from: 'minkj1992@gmail.com', // Senders email address
-          subject: '[NEXTERS] 19기 서류 전형 결과 발표 안내',
-          template: './index', // The `.pug` or `.hbs` extension is appended automatically.
-          context: {
-            username: user.이름,
-            meetDate:
-              '6월 5일 일요일 13:00 - 13:25 / 30분간 그룹 인터뷰로 진행',
-            meetPlace:
-              'Open up 저스트코 타워 13층 ( 선릉역 10번 출구 도보 5분 )',
-          },
-        })
-        .then(success => {
-          console.log(success);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      await this.taskJob(user, template);
     });
   }
-
-  async sendMailToUnsuccessfulApplicants(): Promise<void> {}
 }

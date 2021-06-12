@@ -8,7 +8,7 @@ export class AppController {
   @Get('template')
   sendTemplate(flag = true) {
     return flag
-      ? this.appService.sendMailToSuccessfulApplicants()
-      : this.appService.sendMailToUnsuccessfulApplicants();
+      ? this.appService.sendMailToApplicants('pre_meet')
+      : this.appService.sendMailToApplicants('index_fail');
   }
 }
