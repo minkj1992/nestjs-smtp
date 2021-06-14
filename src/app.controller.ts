@@ -8,7 +8,7 @@ export class AppController {
   @Get('template')
   sendTemplate(flag = true) {
     return flag
-      ? this.appService.sendMailToApplicants('pre_meet')
+      ? this.appService.sendMailToApplicants('meet_notification')
       : this.appService.sendMailToApplicants('index_fail');
   }
 }

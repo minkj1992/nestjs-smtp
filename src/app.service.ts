@@ -23,15 +23,20 @@ export class AppService {
       .sendMail({
         to: user.이메일,
         from: 'teamnexters@gmail.com', // Senders email address
-        subject: '[NEXTERS] 19기 서류 전형 결과에 대해 알려드립니다.',
+        subject: '[NEXTERS] 19기 면접 일정에 대해 알려드립니다.',
         template: `./${template}`, // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           username: user.이름,
+          date: user.날짜,
+          time: user.시간,
+          role: user.직무,
         },
       })
-      .then(() => console.log('success'))
+      // .then(() => console.log('success'))
       .catch(err => {
-        console.log(`${user.이름},${user.이메일},${user['핸드폰 번호']}`);
+        console.log(
+          `${user.이름},${user.이메일},${user['핸드폰 번호']},${user.날짜},${user.시간},${user.직무}`,
+        );
       });
   }
 
