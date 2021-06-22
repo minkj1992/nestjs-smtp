@@ -6,9 +6,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('template')
-  sendTemplate(flag = true) {
+  sendTemplate(flag = false) {
     return flag
-      ? this.appService.sendMailToApplicants('meet_notification')
-      : this.appService.sendMailToApplicants('index_fail');
+      ? this.appService.sendMailToApplicants('final_success')
+      : this.appService.sendMailToApplicants('final_fail');
   }
 }

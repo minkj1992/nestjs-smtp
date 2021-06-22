@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Simple Transactional Email</title>
+    <style>
+      /* -------------------------------------
+                GLOBAL RESETS
+            ------------------------------------- */
+
+      /*All the styling goes here*/
+
+      img {
+        border: none;
+        -ms-interpolation-mode: bicubic;
+        max-width: 100%;
+      }
+
+      body {
+        background-color: #f6f6f6;
+        font-family: sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        color: black
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      table {
+        border-collapse: separate;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        width: 100%;
+      }
+
+      table td {
+        font-family: sans-serif;
+        font-size: 14px;
+        vertical-align: top;
+      }
+
+      /* -------------------------------------
+                BODY & CONTAINER
+            ------------------------------------- */
+
+      .body {
+        background-color: #f6f6f6;
+        width: 100%;
+      }
+
+      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+      .container {
+        display: block;
+        margin: 0 auto !important;
+        /* makes it centered */
+        max-width: 580px;
+        padding: 10px;
+        width: 580px;
+      }
+
+      /* This should also be a block element, so that it will fill 100% of the .container */
+      .content {
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto;
+        max-width: 580px;
+        padding: 10px;
+      }
+
+      /* -------------------------------------
+                HEADER, FOOTER, MAIN
+            ------------------------------------- */
+      .main {
+        background: #ffffff;
+        border-radius: 3px;
+        width: 100%;
+      }
+
+      .wrapper {
+        box-sizing: border-box;
+        padding: 20px;
+      }
+
+      .content-block {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .footer {
+        clear: both;
+        margin-top: 10px;
+        text-align: center;
+        width: 100%;
+      }
+
+      .footer td,
+      .footer p,
+      .footer span,
+      .footer a {
+        color: #999999;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      /* -------------------------------------
+                TYPOGRAPHY
+            ------------------------------------- */
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: #000000;
+        font-family: sans-serif;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        font-size: 35px;
+        font-weight: 300;
+        text-align: center;
+      }
+
+      p,
+      ul,
+      ol {
+        font-family: sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        margin: 0;
+        margin-bottom: 15px;
+      }
+
+      p li,
+      ul li,
+      ol li {
+        list-style-position: inside;
+        margin-left: 5px;
+      }
+
+      a {
+        color: #3498db;
+        text-decoration: underline;
+      }
+
+      /* -------------------------------------
+                BUTTONS
+            ------------------------------------- */
+      .btn {
+        box-sizing: border-box;
+        width: 100%;
+      }
+
+      .btn > tbody > tr > td {
+        padding-bottom: 15px;
+      }
+
+      .btn table {
+        width: auto;
+      }
+
+      .btn table td {
+        background-color: #ffffff;
+        border-radius: 5px;
+        text-align: center;
+      }
+
+      .btn a {
+        background-color: #ffffff;
+        border: solid 1px #3498db;
+        border-radius: 5px;
+        box-sizing: border-box;
+        color: #3498db;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0;
+        padding: 12px 25px;
+      }
+
+      .btn-primary table td {
+        background-color: #3498db;
+      }
+
+      .btn-primary a {
+        background-color: #3498db;
+        border-color: #3498db;
+        color: #ffffff;
+      }
+
+      /* -------------------------------------
+                OTHER STYLES THAT MIGHT BE USEFUL
+            ------------------------------------- */
+      .last {
+        margin-bottom: 0;
+      }
+
+      .first {
+        margin-top: 0;
+      }
+
+      .align-center {
+        text-align: center;
+      }
+
+      .align-right {
+        text-align: right;
+      }
+
+      .align-left {
+        text-align: left;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      .mt0 {
+        margin-top: 0;
+      }
+
+      .mb0 {
+        margin-bottom: 0;
+      }
+
+      .preheader {
+        color: transparent;
+        display: none;
+        height: 0;
+        max-height: 0;
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        mso-hide: all;
+        visibility: hidden;
+        width: 0;
+      }
+
+      .powered-by a {
+        text-decoration: none;
+      }
+
+      hr {
+        border: 0;
+        border-bottom: 1px solid #f6f6f6;
+        margin: 20px 0;
+      }
+
+      /* -------------------------------------
+                RESPONSIVE AND MOBILE FRIENDLY STYLES
+            ------------------------------------- */
+      @media only screen and (max-width: 620px) {
+        table[class='body'] h1 {
+          font-size: 28px !important;
+          margin-bottom: 10px !important;
+        }
+
+        table[class='body'] p,
+        table[class='body'] ul,
+        table[class='body'] ol,
+        table[class='body'] td,
+        table[class='body'] span,
+        table[class='body'] a {
+          font-size: 16px !important;
+        }
+
+        table[class='body'] .wrapper,
+        table[class='body'] .article {
+          padding: 10px !important;
+        }
+
+        table[class='body'] .content {
+          padding: 0 !important;
+        }
+
+        table[class='body'] .container {
+          padding: 0 !important;
+          width: 100% !important;
+        }
+
+        table[class='body'] .main {
+          border-left-width: 0 !important;
+          border-radius: 0 !important;
+          border-right-width: 0 !important;
+        }
+
+        table[class='body'] .btn table {
+          width: 100% !important;
+        }
+
+        table[class='body'] .btn a {
+          width: 100% !important;
+        }
+
+        table[class='body'] .img-responsive {
+          height: auto !important;
+          max-width: 100% !important;
+          width: auto !important;
+        }
+      }
+
+      /* -------------------------------------
+                PRESERVE THESE STYLES IN THE HEAD
+            ------------------------------------- */
+      @media all {
+        .ExternalClass {
+          width: 100%;
+        }
+
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+          line-height: 100%;
+        }
+
+        .apple-link a {
+          color: inherit !important;
+          font-family: inherit !important;
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          line-height: inherit !important;
+          text-decoration: none !important;
+        }
+
+        #MessageViewBody a {
+          color: inherit;
+          text-decoration: none;
+          font-size: inherit;
+          font-family: inherit;
+          font-weight: inherit;
+          line-height: inherit;
+        }
+
+        .btn-primary table td:hover {
+          background-color: #34495e !important;
+        }
+
+        .btn-primary a:hover {
+          background-color: #34495e !important;
+          border-color: #34495e !important;
+        }
+      }
+      @import url('https://fonts.googleapis.com/css?family=Abel');
+
+      html,
+      body {
+        background: #fceeb5;
+        font-family: Abel, Arial, Verdana, sans-serif;
+      }
+
+      /* card template */
+      .center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+      }
+
+      .card {
+        width: 450px;
+        height: 250px;
+        background-color: #fff;
+        background: linear-gradient(#f8f8f8, #fff);
+        box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.4);
+        border-radius: 6px;
+        overflow: hidden;
+        position: relative;
+        margin: 1.5rem;
+      }
+
+      .card h1 {
+        text-align: center;
+      }
+
+      .card .additional {
+        position: absolute;
+        width: 150px;
+        height: 100%;
+        background: linear-gradient(#6b68f6, #000000);
+        transition: width 0.4s;
+        overflow: hidden;
+        z-index: 2;
+      }
+
+      .card .additional .user-card .level,
+      .card .additional .user-card .points {
+        top: 15%;
+        color: #fff;
+        font-size: 0.75em;
+        font-weight: bold;
+        background: rgba(0, 0, 0, 0.15);
+        padding: 0.125rem 0.75rem;
+        border-radius: 100px;
+        white-space: nowrap;
+      }
+
+      .card .additional .user-card .points {
+        top: 85%;
+      }
+      .card .general {
+        width: 300px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        box-sizing: border-box;
+        padding: 1rem;
+        padding-top: 0;
+      }
+
+      .card .general .more {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+
+  <body class="">
+    <table
+      role="presentation"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      class="body"
+    >
+      <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+          <div class="content">
+            <!-- START CENTERED WHITE CONTAINER -->
+            <table role="presentation" class="main">
+              <!-- START MAIN CONTENT AREA -->
+              <tr>
+                <td class="wrapper">
+                  <table
+                    role="presentation"
+                    border="0"
+                    cellpadding="0"
+                    cellspacing="0"
+                  >
+                    <tr>
+                      <td>
+                        <p>안녕하세요. NEXTERS입니다.</p>
+                        <p>
+                          <strong>{{ username }}</strong>님은 이번 넥스터즈 19기 활동회원으로 최종 합격하셨습니다. 🎉<br />
+                          저희 19기 운영진은 코로나 상황 속에서도 프로젝트가 잘 진행될 수 있도록, 참여하신 모든 분들에게 값진 시간이 될 수 있도록 최선을 다할 것입니다. <br />
+                          <br/>
+                          아래의 공지를 읽고 활동을 희망하시는 경우,<br />
+                          <strong style="color: red;">반드시 6월 23일(수) 12:00(점심)까지 성함과 함께 참여의사를 회신해주시길 바랍니다.</strong>
+                          <br />
+                          예시> <br />
+                          {{ username }} 넥스터즈 19기 활동에 (참여/불참)합니다. 
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p>
+                          <strong>#1. 모임모임 </strong><br />
+                          원활한 팀빌딩을 위해, OT 전(7/3)에 아이디어를 모으고 투표하는 기간을 가지려 합니다. <br />
+                          자세한 설명은 추후에 초대드릴 카카오 단체톡방을 통해 공지 드릴 예정이며, 그 전에 미리 회원가입을 해주시길 바랍니다.<br />
+                          <br />
+                          - URL : www.모임모임.com <br />
+                          - 넥스터즈 인증코드: 20210703 <br />
+                          - 가입 기수 : 19기 선택 <br />
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p>
+                          <strong>#2. 회칙 </strong><br />
+                          넥스터즈의 모든 회원은 회칙을 지킬 의무가 있습니다. 반드시 숙지해주시기 바랍니다. <br />
+                          👉 <a href="https://docs.google.com/document/d/1FI7EnmWYbFutI5OlrnQ_KIRBmB_MGrOvdrfEZDNJOHw/edit?usp=sharing">넥스터즈 운영회칙</a>
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p>
+                          <strong>#3. 운영비</strong><br />
+                          넥스터즈는 매 기수 활동마다 운영비 3만원을 걷고 있습니다. <br />
+                          운영비는 홈페이지에 게시된 바와 같이 서버 유지, 행사 비용 등 NEXTERS 운영에 사용됩니다. <br />
+                          회계 내용은 모두 공개하여 투명하게 관리하고 있습니다. <br />
+
+                          - 예금주: 박영준<br/>
+                          - 회비: 3만원<br/>
+                          - 계좌: 카카오뱅크 3333-15-8603424<br />
+                          입금 시 [19기 OOO]로 입금명 변경 부탁드립니다. <br />
+                          6월 30일(수) 23시 59분까지 입금하여 주시기 바랍니다.
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p>
+                          <strong>#4. 페이스북 계정 친구 추가</strong><br />
+                          아래 운영진에게 페이스북 친구 요청을 부탁드립니다. <br />
+                          NEXTERS 비공개 그룹에 추가해 드리도록 하겠습니다. <br />
+                          CMO 박주리 : https://www.facebook.com/pjr9105
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p>
+                          <strong>#5. 활동 전, 운영진의 연락처를 등록해 주시기 바랍니다.</strong><br />
+                          CEO 김범준 : 010-2613-2058<br />
+                          COO 박영준 : 010-6432-6752<br />
+                          CTO 제민욱 : 010-9567-3530<br />
+                          CDO 허지인 : 010-4199-7583<br />
+                          CMO 박주리 : 010-7435-0153<br />
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p>
+                          <strong>#6. 오리엔테이션(필참)</strong><br />
+                          일시: 7월 3일(토) 오후 2시 ~ 6시<br />
+                          코로나19로 인해 Zoom, Gather(optional)을 이용하여 온라인으로 진행됩니다.<br />
+                          링크는 OT전에 생성할 넥스터즈 19기 카톡 단톡방으로 공유 해드릴 예정입니다.<br />
+                          NEXTERS 소개, 운영 계획, 프로젝트 진행을 위한 팀 빌딩이 진행되오니 필참 부탁드립니다.<br />
+                        </p>
+                        <p></p>
+                        <p></p>
+                        <p class="align-center">다시 한 번 19기 선발을 진심으로 축하드립니다. 👋<br /> 감사합니다. <br />NEXTERS 드림.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="align-center">
+                        <img width="350px" height="300px"
+                        src=https://user-images.githubusercontent.com/37536298/121761821-18a0d780-cb6d-11eb-84be-67a33b7bdf28.png>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <!-- END MAIN CONTENT AREA -->
+            </table>
+
+            <!-- END CENTERED WHITE CONTAINER -->
+
+            <!-- START FOOTER -->
+
+            <div class="footer">
+              <table
+                role="presentation"
+                border="0"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <tr>
+                  <td class="content-block powered-by">
+                    Powered by <a href="http://htmlemail.io">HTMLemail</a>.
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- END FOOTER -->
+          </div>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </body>
+</html>
